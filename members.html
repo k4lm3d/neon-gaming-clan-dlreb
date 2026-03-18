@@ -260,3 +260,286 @@
                 rank: "Immortal 2",
                 joinDate: "2023",
                 image: "http://static.photos/people/320x240/107",
+                stats: { kda: "1.32", winRate: "62%", hours: "1950" },
+                bio: "Entry fragger with aggressive playstyle. Known for opening rounds and creating space for the team."
+            },
+            {
+                id: 8,
+                name: "Chris 'Storm' Brown",
+                role: "player",
+                roleLabel: "Player",
+                game: "apex",
+                gameLabel: "Apex Legends",
+                rank: "Master",
+                joinDate: "2023",
+                image: "http://static.photos/people/320x240/108",
+                stats: { kda: "1.8", winRate: "42%", hours: "2200" },
+                bio: "Movement specialist and frag leader. Excels at making space for the squad in competitive matches."
+            },
+            {
+                id: 9,
+                name: "Mike 'Razor' Taylor",
+                role: "coach",
+                roleLabel: "Coach",
+                game: "valorant",
+                gameLabel: "Valorant",
+                rank: "Radiant",
+                joinDate: "2022",
+                image: "http://static.photos/people/320x240/109",
+                stats: { kda: "1.15", winRate: "55%", hours: "1200" },
+                bio: "Analyst coach focusing on opponent tendencies and anti-strat preparation for tournaments."
+            },
+            {
+                id: 10,
+                name: "Jenny 'Frost' Lee",
+                role: "player",
+                roleLabel: "Player",
+                game: "lol",
+                gameLabel: "League of Legends",
+                rank: "Grandmaster",
+                joinDate: "2023",
+                image: "http://static.photos/people/320x240/110",
+                stats: { kda: "3.5", winRate: "65%", hours: "2800" },
+                bio: "Support main with exceptional vision control and roaming timing. Shot-caller for bot lane."
+            },
+            {
+                id: 11,
+                name: "Tom 'Blitz' Garcia",
+                role: "player",
+                roleLabel: "Player",
+                game: "cod",
+                gameLabel: "Call of Duty",
+                rank: "Prestige 8",
+                joinDate: "2022",
+                image: "http://static.photos/people/320x240/111",
+                stats: { kda: "1.95", winRate: "61%", hours: "1400" },
+                bio: "SMG player with lightning-fast reactions. Key player in our Search and Destroy game mode."
+            },
+            {
+                id: 12,
+                name: "Amy 'Valkyrie' Wong",
+                role: "player",
+                roleLabel: "Player",
+                game: "dota",
+                gameLabel: "Dota 2",
+                rank: "Divine 3",
+                joinDate: "2023",
+                image: "http://static.photos/people/320x240/112",
+                stats: { kda: "3.2", winRate: "58%", hours: "3100" },
+                bio: "Hard carry player with deep hero pool. Excellent farming patterns and late-game decision making."
+            }
+        ];
+
+        // State management
+        let currentSearch = '';
+        let currentRole = 'all';
+        let currentGame = 'all';
+
+        // DOM elements
+        const searchInput = document.getElementById('searchInput');
+        const roleFilter = document.getElementById('roleFilter');
+        const gameFilter = document.getElementById('gameFilter');
+        const membersGrid = document.getElementById('membersGrid');
+        const noResults = document.getElementById('noResults');
+        const activeFilters = document.getElementById('activeFilters');
+        const memberModal = document.getElementById('memberModal');
+        const modalContent = document.getElementById('modalContent');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMembers();
+            lucide.createIcons();
+        });
+
+        // Event listeners
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value.toLowerCase();
+            renderMembers();
+        });
+
+        roleFilter.addEventListener('change', (e) => {
+            currentRole = e.target.value;
+            renderMembers();
+        });
+
+        gameFilter.addEventListener('change', (e) => {
+            currentGame = e.target.value;
+            renderMembers();
+        });
+
+        // Filter and render members
+        function renderMembers() {
+            const filtered = members.filter(member => {
+                const matchesSearch = member.name.toLowerCase().includes(currentSearch) || 
+                                    member.roleLabel.toLowerCase().includes(currentSearch) ||
+                                    member.gameLabel.toLowerCase().includes(currentSearch);
+                const matchesRole = currentRole === 'all' || member.role === currentRole;
+                const matchesGame = currentGame === 'all' || member.game === currentGame;
+                
+                return matchesSearch && matchesRole && matchesGame;
+            });
+
+            updateActiveFilters();
+
+            if (filtered.length === 0) {
+                membersGrid.innerHTML = '';
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                membersGrid.innerHTML = filtered.map(member => createMemberCard(member)).join('');
+                lucide.createIcons();
+            }
+        }
+
+        // Create member card HTML
+        function createMemberCard(member) {
+            const roleColors = {
+                founder: 'bg-orange-500',
+                captain: 'bg-orange-500',
+                coach: 'bg-blue-500',
+                player: 'bg-gray-600',
+                manager: 'bg-purple-500'
+            };
+
+            return `
+                <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-orange-500/50 transition-all duration-300 group cursor-pointer" onclick="openModal(${member.id})">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${member.image}" alt="${member.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="px-3 py-1 ${roleColors[member.role]} text-white text-xs font-bold rounded-full">${member.roleLabel}</span>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="px-2 py-1 bg-gray-900/80 text-orange-400 text-xs font-bold rounded border border-orange-500/30">${member.rank}</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold mb-1 group-hover:text-orange-500 transition-colors">${member.name}</h3>
+                        <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                            <i data-lucide="gamepad-2" class="w-4 h-4 text-orange-500"></i>
+                            <span>${member.gameLabel}</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                            <div class="bg-gray-900 rounded p-2">
+                                <div class="text-orange-500 font-bold">${member.stats.kda}</div>
+                                <div class="text-gray-500">K/D/A</div>
+                            </div>
+                            <div class="bg-gray-900 rounded p-2">
+                                <div class="text-orange-500 font-bold">${member.stats.winRate}</div>
+                                <div class="text-gray-500">Win Rate</div>
+                            </div>
+                            <div class="bg-gray-900 rounded p-2">
+                                <div class="text-orange-500 font-bold">${member.stats.hours}</div>
+                                <div class="text-gray-500">Hours</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update active filters display
+        function updateActiveFilters() {
+            const filters = [];
+            if (currentRole !== 'all') filters.push(`Role: ${currentRole.charAt(0).toUpperCase() + currentRole.slice(1)}`);
+            if (currentGame !== 'all') filters.push(`Game: ${currentGame.toUpperCase()}`);
+            
+            if (filters.length > 0) {
+                activeFilters.innerHTML = '<span class="text-sm text-gray-400 mr-2">Active filters:</span>' + 
+                    filters.map(f => `<span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded border border-orange-500/30">${f}</span>`).join('');
+                activeFilters.classList.remove('hidden');
+            } else {
+                activeFilters.classList.add('hidden');
+            }
+        }
+
+        // Reset all filters
+        function resetFilters() {
+            currentSearch = '';
+            currentRole = 'all';
+            currentGame = 'all';
+            searchInput.value = '';
+            roleFilter.value = 'all';
+            gameFilter.value = 'all';
+            renderMembers();
+        }
+
+        // Open member modal
+        function openModal(memberId) {
+            const member = members.find(m => m.id === memberId);
+            if (!member) return;
+
+            const roleColors = {
+                founder: 'bg-orange-500',
+                captain: 'bg-orange-500',
+                coach: 'bg-blue-500',
+                player: 'bg-gray-600',
+                manager: 'bg-purple-500'
+            };
+
+            modalContent.innerHTML = `
+                <div class="relative">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="${member.image}" alt="${member.name}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-800 to-transparent"></div>
+                        <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-900/80 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="px-3 py-1 ${roleColors[member.role]} text-white text-xs font-bold rounded-full">${member.roleLabel}</span>
+                            <span class="px-3 py-1 bg-orange-500/20 text-orange-400 text-xs font-bold rounded border border-orange-500/30">${member.rank}</span>
+                        </div>
+                        <h2 class="text-2xl font-bold mb-2">${member.name}</h2>
+                        <div class="flex items-center gap-2 text-gray-400 mb-4 text-sm">
+                            <i data-lucide="gamepad-2" class="w-4 h-4 text-orange-500"></i>
+                            <span>${member.gameLabel}</span>
+                            <span class="mx-2">•</span>
+                            <span>Joined ${member.joinDate}</span>
+                        </div>
+                        <p class="text-gray-300 mb-6 leading-relaxed">${member.bio}</p>
+                        <div class="grid grid-cols-3 gap-3 text-center">
+                            <div class="bg-gray-900 rounded-lg p-3 border border-gray-700">
+                                <div class="text-xl font-bold text-orange-500">${member.stats.kda}</div>
+                                <div class="text-xs text-gray-500 mt-1">K/D/A Ratio</div>
+                            </div>
+                            <div class="bg-gray-900 rounded-lg p-3 border border-gray-700">
+                                <div class="text-xl font-bold text-orange-500">${member.stats.winRate}</div>
+                                <div class="text-xs text-gray-500 mt-1">Win Rate</div>
+                            </div>
+                            <div class="bg-gray-900 rounded-lg p-3 border border-gray-700">
+                                <div class="text-xl font-bold text-orange-500">${member.stats.hours}</div>
+                                <div class="text-xs text-gray-500 mt-1">Hours Played</div>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex gap-3">
+                            <button class="flex-1 px-4 py-2 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="message-square" class="w-4 h-4"></i>
+                                Message
+                            </button>
+                            <button class="px-4 py-2 border border-gray-600 text-gray-300 rounded-lg hover:border-orange-500 hover:text-orange-500 transition-colors">
+                                <i data-lucide="share-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            memberModal.classList.remove('hidden');
+            lucide.createIcons();
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal() {
+            memberModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !memberModal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
