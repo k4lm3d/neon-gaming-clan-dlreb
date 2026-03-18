@@ -1,10 +1,13 @@
 ---
-title: Neon Gaming Clan Dlreb
-emoji: 🏃
-colorFrom: indigo
+title: Neon Gaming Clan 🔥
+colorFrom: red
 colorTo: blue
 sdk: static
-pinned: false
+emoji: 💡
+tags:
+  - deepsite-v4
 ---
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+# Neon Gaming Clan 🔥
+
+This project has been created with [DeepSite](https://deepsite.hf.co) AI Vibe Coding.

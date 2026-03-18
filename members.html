@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members Directory - Neon Gaming Clan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-950 text-white font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                    <i data-lucide="gamepad-2" class="h-8 w-8 text-orange-500"></i>
+                    <span class="font-bold text-xl tracking-wider text-white">NEON<span class="text-orange-500">CLAN</span></span>
+                </div>
+
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-gray-300 hover:text-orange-500 font-medium px-3 py-2 rounded-md text-sm transition-colors">Home</a>
+                        <a href="about.html" class="text-gray-300 hover:text-orange-500 font-medium px-3 py-2 rounded-md text-sm transition-colors">About</a>
+                        <a href="news.html" class="text-gray-300 hover:text-orange-500 font-medium px-3 py-2 rounded-md text-sm transition-colors">News</a>
+                        <a href="members.html" class="text-orange-500 font-medium px-3 py-2 rounded-md text-sm transition-colors">Members</a>
+                    </div>
+                </div>
+
+                <div class="md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-orange-500 focus:outline-none p-2">
+                        <i data-lucide="menu" class="h-6 w-6" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:hidden hidden bg-gray-900/95 backdrop-blur-md border-t border-gray-800" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="text-gray-300 hover:text-orange-500 hover:bg-gray-800/50 block px-3 py-2 rounded-md text-base font-medium transition-colors">Home</a>
+                <a href="about.html" class="text-gray-300 hover:text-orange-500 hover:bg-gray-800/50 block px-3 py-2 rounded-md text-base font-medium transition-colors">About</a>
+                <a href="news.html" class="text-gray-300 hover:text-orange-500 hover:bg-gray-800/50 block px-3 py-2 rounded-md text-base font-medium transition-colors">News</a>
+                <a href="members.html" class="text-orange-500 block px-3 py-2 rounded-md text-base font-medium bg-gray-800/50">Members</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="pt-32 pb-12 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-8">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">Members <span class="text-orange-500">Directory</span></h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">Meet our elite roster of players, coaches, and staff members.</p>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-gray-800/80 backdrop-blur-md rounded-2xl p-4 border border-gray-700 shadow-xl">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <!-- Search -->
+                        <div class="flex-1 relative">
+                            <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+                            <input type="text" id="searchInput" placeholder="Search by name, role, or game..." 
+                                class="w-full pl-12 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-orange-500 text-white placeholder-gray-500 transition-colors">
+                        </div>
+                        
+                        <!-- Filters -->
+                        <div class="flex gap-2 flex-wrap md:flex-nowrap">
+                            <select id="roleFilter" class="px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-orange-500 text-white cursor-pointer">
+                                <option value="all">All Roles</option>
+                                <option value="founder">Founder</option>
+                                <option value="captain">Captain</option>
+                                <option value="player">Player</option>
+                                <option value="coach">Coach</option>
+                                <option value="manager">Manager</option>
+                            </select>
+                            
+                            <select id="gameFilter" class="px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-orange-500 text-white cursor-pointer">
+                                <option value="all">All Games</option>
+                                <option value="valorant">Valorant</option>
+                                <option value="lol">League of Legends</option>
+                                <option value="apex">Apex Legends</option>
+                                <option value="cod">Call of Duty</option>
+                                <option value="dota">Dota 2</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Active Filters -->
+                    <div id="activeFilters" class="flex flex-wrap gap-2 mt-4 hidden">
+                        <span class="text-sm text-gray-400 mr-2">Active filters:</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Members Grid -->
+    <section class="py-12 pb-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="membersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Members will be populated by JavaScript -->
+            </div>
+            
+            <!-- No Results -->
+            <div id="noResults" class="hidden text-center py-20">
+                <i data-lucide="users-x" class="w-16 h-16 text-gray-600 mx-auto mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-400 mb-2">No members found</h3>
+                <p class="text-gray-500">Try adjusting your search or filters</p>
+                <button onclick="resetFilters()" class="mt-4 px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+                    Reset Filters
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Member Detail Modal -->
+    <div id="memberModal" class="fixed inset-0 z-[60] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-950/90 backdrop-blur-sm transition-opacity" aria-hidden="true" onclick="closeModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-gray-800 rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full border border-gray-700">
+                <div id="modalContent">
+                    <!-- Content populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 border-t border-gray-800 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="gamepad-2" class="h-6 w-6 text-orange-500"></i>
+                        <span class="font-bold text-lg">NEON<span class="text-orange-500">CLAN</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm max-w-xs">Elite gaming community focused on competitive excellence and camaraderie across multiple gaming titles.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="index.html" class="hover:text-orange-500 transition-colors">Home</a></li>
+                        <li><a href="about.html" class="hover:text-orange-500 transition-colors">About</a></li>
+                        <li><a href="news.html" class="hover:text-orange-500 transition-colors">News</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Connect</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-gray-400 hover:text-orange-500 transition-colors">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-orange-500 transition-colors">
+                            <i data-lucide="twitch" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-orange-500 transition-colors">
+                            <i data-lucide="youtube" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2024 Neon Gaming Clan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Members Data
+        const members = [
+            {
+                id: 1,
+                name: "Alex 'Viper' Chen",
+                role: "founder",
+                roleLabel: "Founder",
+                game: "valorant",
+                gameLabel: "Valorant",
+                rank: "Radiant",
+                joinDate: "2020",
+                image: "http://static.photos/people/320x240/101",
+                stats: { kda: "1.45", winRate: "68%", hours: "2400" },
+                bio: "Former pro player turned clan commander. Specializes in tactical leadership and site executes."
+            },
+            {
+                id: 2,
+                name: "Sarah 'Phoenix' Miller",
+                role: "captain",
+                roleLabel: "Captain",
+                game: "valorant",
+                gameLabel: "Valorant",
+                rank: "Immortal 3",
+                joinDate: "2021",
+                image: "http://static.photos/people/320x240/102",
+                stats: { kda: "1.38", winRate: "65%", hours: "2100" },
+                bio: "IGL specialist with exceptional game sense. Leads the competitive Valorant roster."
+            },
+            {
+                id: 3,
+                name: "Marcus 'Ghost' Johnson",
+                role: "manager",
+                roleLabel: "Manager",
+                game: "apex",
+                gameLabel: "Apex Legends",
+                rank: "Master",
+                joinDate: "2020",
+                image: "http://static.photos/people/320x240/103",
+                stats: { kda: "1.2", winRate: "45%", hours: "1800" },
+                bio: "Community manager and support player. Handles recruitment and event coordination."
+            },
+            {
+                id: 4,
+                name: "Jake 'Blaze' Thompson",
+                role: "player",
+                roleLabel: "Player",
+                game: "lol",
+                gameLabel: "League of Legends",
+                rank: "Challenger",
+                joinDate: "2022",
+                image: "http://static.photos/people/320x240/104",
+                stats: { kda: "4.2", winRate: "72%", hours: "3200" },
+                bio: "Mid lane main with a 72% win rate. Known for aggressive plays and clutch performances."
+            },
+            {
+                id: 5,
+                name: "Emma 'Shadow' Davis",
+                role: "player",
+                roleLabel: "Player",
+                game: "cod",
+                gameLabel: "Call of Duty",
+                rank: "Prestige 10",
+                joinDate: "2022",
+                image: "http://static.photos/people/320x240/105",
+                stats: { kda: "2.1", winRate: "58%", hours: "1500" },
+                bio: "AR specialist with lightning-fast reflexes. Top fragger in last season's tournament."
+            },
+            {
+                id: 6,
+                name: "David 'Titan' Wilson",
+                role: "coach",
+                roleLabel: "Coach",
+                game: "dota",
+                gameLabel: "Dota 2",
+                rank: "Divine 5",
+                joinDate: "2021",
+                image: "http://static.photos/people/320x240/106",
+                stats: { kda: "3.8", winRate: "60%", hours: "4500" },
+                bio: "Strategic coach with 10 years of MOBA experience. Develops team strategies and VOD reviews."
+            },
+            {
+                id: 7,
+                name: "Lisa 'Nova' Anderson",
+                role: "player",
+                roleLabel: "Player",
+                game: "valorant",
+                gameLabel: "Valorant",
+                rank: "Immortal 2",
+                joinDate: "2023",
+                image: "http://static.photos/people/320x240/107",
